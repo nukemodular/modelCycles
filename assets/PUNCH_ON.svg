@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 8 8" style="enable-background:new 0 0 8 8;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:none;stroke:#FFFFFF;stroke-width:0.39;stroke-miterlimit:10;}
+</style>
+<g id="Ebene_2_00000083054324726073734640000010922149950300775868_">
+	<g id="Ebene_1-2">
+		<radialGradient id="SVGID_1_" cx="4" cy="4" r="8.3193" gradientUnits="userSpaceOnUse">
+			<stop  offset="0" style="stop-color:#FD7B64"/>
+			<stop  offset="0.2448" style="stop-color:#FD5F58"/>
+			<stop  offset="0.4046" style="stop-color:#FD5252"/>
+			<stop  offset="0.4215" style="stop-color:#F75050"/>
+			<stop  offset="0.8243" style="stop-color:#6B2323"/>
+			<stop  offset="1" style="stop-color:#331111"/>
+		</radialGradient>
+		<path class="st0" d="M0.8,0h6.5C7.7,0,8,0.3,8,0.8v6.5C8,7.7,7.7,8,7.2,8H0.8C0.3,8,0,7.7,0,7.2V0.8C0,0.3,0.3,0,0.8,0z"/>
+	</g>
+</g>
+<path class="st1" d="M6.2,5.4V2.9c0-0.6-0.4-0.8-0.6-0.8C5.6,1.6,5,1.6,5,1.6H4.2c-1.3,0-2,0.5-2,1.8v1.3c0,1.2,0.7,1.8,2,1.8h1.1
+	C5.8,6.4,6.2,5.9,6.2,5.4z"/>
+<path class="st1" d="M2.3,5.3H1.6c-0.1,0-0.2-0.1-0.2-0.2l0,0l0,0v-2c0-0.1,0.1-0.2,0.2-0.3h0.8"/>
+<path class="st1" d="M5.6,2.1C5.6,2.6,5,3,4.4,3C4.1,3,3.8,3,3.5,2.8"/>
+<path class="st1" d="M4,6.3C3.7,5.7,3.6,5.1,3.6,4.5c0-0.5,0.1-1,0.3-1.5"/>
+</svg>
