@@ -380,42 +380,40 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 {
     juce::ScopedNoDenormals noDenormals;
 
-   #if JucePlugin_IsMidiEffect
-    buffer.clear();
+    // Pass-through audio.
+    juce::ignoreUnused(buffer);
 
-    juce::MidiBuffer output;
+    // Audio FX behaviour: leave audio untouched (pass-through) and transform MIDI.
+    // Ableton Live won't load many VST3 "MIDI effect" plugins, but it will pass MIDI through
+    // standard audio effects when MIDI I/O is enabled.
 
-    for (const auto metadata : midi)
+    if (! midi.isEmpty())
     {
-        auto message = metadata.getMessage();
-        const auto samplePosition = metadata.samplePosition;
+        juce::MidiBuffer output;
 
-        if (message.isNoteOnOrOff())
+        for (const auto metadata : midi)
         {
-            // Track mapping: MIDI channels 1-6 -> tracks 1-6.
-            const int channelIdx = message.getChannel() - 1;
-            const int semis = (channelIdx >= 0 && channelIdx < (int) trackPitchSemitones.size())
-                                ? (int) std::lround(trackPitchSemitones[(size_t) channelIdx]->load())
-                                : 0;
+            auto message = metadata.getMessage();
+            const auto samplePosition = metadata.samplePosition;
 
-            const int note = message.getNoteNumber();
-            const int shifted = juce::jlimit(0, 127, note + semis);
-            message.setNoteNumber(shifted);
+            if (message.isNoteOnOrOff())
+            {
+                // Track mapping: MIDI channels 1-6 -> tracks 1-6.
+                const int channelIdx = message.getChannel() - 1;
+                const int semis = (channelIdx >= 0 && channelIdx < (int) trackPitchSemitones.size())
+                                    ? (int) std::lround(trackPitchSemitones[(size_t) channelIdx]->load())
+                                    : 0;
+
+                const int note = message.getNoteNumber();
+                const int shifted = juce::jlimit(0, 127, note + semis);
+                message.setNoteNumber(shifted);
+            }
+
+            output.addEvent(message, samplePosition);
         }
 
-        output.addEvent(message, samplePosition);
+        midi.swapWith(output);
     }
-
-    midi.swapWith(output);
-   #else
-    juce::ignoreUnused (midi);
-
-    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
-    {
-        auto* data = buffer.getWritePointer (channel);
-        juce::ignoreUnused (data);
-    }
-   #endif
 }
 
 bool PluginProcessor::hasEditor() const
