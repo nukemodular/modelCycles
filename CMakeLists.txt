@@ -55,13 +55,13 @@ target_sources(modelCycles
         source/PluginEditor.cpp
         source/PluginProcessor.h
         source/PluginEditor.h
-    source/ui_components/LabeledSlider.h
-    source/ui_components/RotaryDial.h
-    source/ui_components/StudioLookAndFeel.h
-    source/ui_components/ImageToggle.h
-    source/ui_components/LayeredMenuButton.h
-    source/ui_components/TrackSelectorButton.h
-    source/ui_components/StudioStyle.h
+        source/ui_components/LabeledSlider.h
+        source/ui_components/RotaryDial.h
+        source/ui_components/StudioLookAndFeel.h
+        source/ui_components/ImageToggle.h
+        source/ui_components/LayeredMenuButton.h
+        source/ui_components/TrackSelectorButton.h
+        source/ui_components/StudioStyle.h
 )
 
 target_compile_definitions(modelCycles

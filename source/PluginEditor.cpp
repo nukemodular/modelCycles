@@ -14,13 +14,23 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     setLookAndFeel(&lookAndFeel);
 
-    addAndMakeVisible(patternSelectBackdrop);
-    addAndMakeVisible(patternBankCombo);
-    addAndMakeVisible(patternIndexCombo);
-    addAndMakeVisible(patternCaptionLabel);
+    addAndMakeVisible(uiRoot);
 
-    addAndMakeVisible(toneColorValueCombo);
-    addAndMakeVisible(chordShapeValueCombo);
+    setResizable(true, true);
+    setResizeLimits(juce::roundToInt((float) baseEditorWidthPx * 0.33f),
+                    juce::roundToInt((float) baseEditorHeightPx * 0.33f),
+                    juce::roundToInt((float) baseEditorWidthPx * 2.0f),
+                    juce::roundToInt((float) baseEditorHeightPx * 2.0f));
+    if (auto* c = getConstrainer())
+        c->setFixedAspectRatio((double) baseEditorWidthPx / (double) baseEditorHeightPx);
+
+    uiRoot.addAndMakeVisible(patternSelectBackdrop);
+    uiRoot.addAndMakeVisible(patternBankCombo);
+    uiRoot.addAndMakeVisible(patternIndexCombo);
+    uiRoot.addAndMakeVisible(patternCaptionLabel);
+
+    uiRoot.addAndMakeVisible(toneColorValueCombo);
+    uiRoot.addAndMakeVisible(chordShapeValueCombo);
 
     // The MIX overlay uses an always-on-top component; keep the pattern selector above it.
     patternSelectBackdrop.setAlwaysOnTop(true);
@@ -38,25 +48,25 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     toneColorValueCombo.setAlwaysOnTop(true);
     chordShapeValueCombo.setAlwaysOnTop(true);
 
-    addAndMakeVisible(pitchNoteBackdrop);
-    addAndMakeVisible(pitchNoteCombo);
-    addAndMakeVisible(pitchControl);
-    addAndMakeVisible(decayControl);
-    addAndMakeVisible(colorControl);
-    addAndMakeVisible(shapeControl);
-    addAndMakeVisible(trackVolumeControl);
-    addAndMakeVisible(mainVolumeOverlayToggle);
-    addAndMakeVisible(trackPanControl);
-    addAndMakeVisible(mainVolumeControl);
+    uiRoot.addAndMakeVisible(pitchNoteBackdrop);
+    uiRoot.addAndMakeVisible(pitchNoteCombo);
+    uiRoot.addAndMakeVisible(pitchControl);
+    uiRoot.addAndMakeVisible(decayControl);
+    uiRoot.addAndMakeVisible(colorControl);
+    uiRoot.addAndMakeVisible(shapeControl);
+    uiRoot.addAndMakeVisible(trackVolumeControl);
+    uiRoot.addAndMakeVisible(mainVolumeOverlayToggle);
+    uiRoot.addAndMakeVisible(trackPanControl);
+    uiRoot.addAndMakeVisible(mainVolumeControl);
 
-    addAndMakeVisible(gateToggle);
-    addAndMakeVisible(punchToggle);
-    addAndMakeVisible(lfoModeButton);
+    uiRoot.addAndMakeVisible(gateToggle);
+    uiRoot.addAndMakeVisible(punchToggle);
+    uiRoot.addAndMakeVisible(lfoModeButton);
 
     // Button labels (match dial label styling)
     for (auto* l : { &punchLabel, &gateLabel, &lfoShapeLabel })
     {
-        addAndMakeVisible(*l);
+        uiRoot.addAndMakeVisible(*l);
         l->setJustificationType(juce::Justification::centred);
         l->setInterceptsMouseClicks(false, false);
         l->setColour(juce::Label::textColourId, juce::Colours::black);
@@ -68,11 +78,11 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     gateLabel.setText("GATE", juce::dontSendNotification);
     lfoShapeLabel.setText("LFO SHAPE", juce::dontSendNotification);
 
-    addAndMakeVisible(scalerCorner);
+    uiRoot.addAndMakeVisible(scalerCorner);
     scalerCorner.setInterceptsMouseClicks(false, false);
     scalerCorner.setSvgFromMemory(BinaryData::Scaler_svg, BinaryData::Scaler_svgSize);
 
-    addAndMakeVisible(mixerOverlay);
+    uiRoot.addAndMakeVisible(mixerOverlay);
     mixerOverlay.setAlwaysOnTop(true);
     mixerOverlay.setVisible(false);
     mixerOverlay.setInterceptsMouseClicks(true, true);
@@ -85,38 +95,38 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     mixerOverlay.addAndMakeVisible(mixDelayTimeSyncToggle);
 
-    addAndMakeVisible(sweepControl);
-    addAndMakeVisible(contourControl);
-    addAndMakeVisible(delSendControl);
-    addAndMakeVisible(delSendOverlayToggle);
-    addAndMakeVisible(revSendControl);
-    addAndMakeVisible(revSendOverlayToggle);
-    addAndMakeVisible(revSizeControl);
-    addAndMakeVisible(delayFeedbackOverlayControl);
+    uiRoot.addAndMakeVisible(sweepControl);
+    uiRoot.addAndMakeVisible(contourControl);
+    uiRoot.addAndMakeVisible(delSendControl);
+    uiRoot.addAndMakeVisible(delSendOverlayToggle);
+    uiRoot.addAndMakeVisible(revSendControl);
+    uiRoot.addAndMakeVisible(revSendOverlayToggle);
+    uiRoot.addAndMakeVisible(revSizeControl);
+    uiRoot.addAndMakeVisible(delayFeedbackOverlayControl);
 
-    addAndMakeVisible(lfoSpeedControl);
-    addAndMakeVisible(lfoSpeedOverlayToggle);
-    addAndMakeVisible(lfoOverlayPanel);
-    addAndMakeVisible(volDistControl);
-    addAndMakeVisible(swingControl);
-    addAndMakeVisible(chanceControl);
-    addAndMakeVisible(delTimeControl);
-    addAndMakeVisible(delTimeSyncToggle);
-    addAndMakeVisible(delTimeSyncControl);
-    addAndMakeVisible(reverbToneOverlayControl);
+    uiRoot.addAndMakeVisible(lfoSpeedControl);
+    uiRoot.addAndMakeVisible(lfoSpeedOverlayToggle);
+    uiRoot.addAndMakeVisible(lfoOverlayPanel);
+    uiRoot.addAndMakeVisible(volDistControl);
+    uiRoot.addAndMakeVisible(swingControl);
+    uiRoot.addAndMakeVisible(chanceControl);
+    uiRoot.addAndMakeVisible(delTimeControl);
+    uiRoot.addAndMakeVisible(delTimeSyncToggle);
+    uiRoot.addAndMakeVisible(delTimeSyncControl);
+    uiRoot.addAndMakeVisible(reverbToneOverlayControl);
 
     for (auto& b : trackButtons)
-        addAndMakeVisible(b);
+        uiRoot.addAndMakeVisible(b);
 
     for (auto& a : trackMachineArrows)
     {
-        addAndMakeVisible(a);
+        uiRoot.addAndMakeVisible(a);
         a.setInterceptsMouseClicks(false, false);
         a.setAlwaysOnTop(true);
     }
 
     for (auto& c : trackMachineCombos)
-        addAndMakeVisible(c);
+        uiRoot.addAndMakeVisible(c);
 
     // MIX overlay dials (6 tracks x 4 dials)
     for (auto& s : mixTrackDials)
@@ -839,7 +849,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     updateMixerOverlayVisibility();
 
-    setSize (750, 500);
+    setSize (baseEditorWidthPx, baseEditorHeightPx);
 }
 
 PluginEditor::~PluginEditor()
@@ -1374,7 +1384,16 @@ void PluginEditor::rebuildTrackAttachments()
 
 void PluginEditor::resized()
 {
-    auto bounds = getLocalBounds().reduced(StudioStyle::Sizes::editorPaddingPx);
+    // Layout at a fixed design size, then scale the whole UI uniformly.
+    uiRoot.setBounds(0, 0, baseEditorWidthPx, baseEditorHeightPx);
+    const float sx = (float) getWidth()  / (float) baseEditorWidthPx;
+    const float sy = (float) getHeight() / (float) baseEditorHeightPx;
+    const float scale = juce::jmax(0.01f, juce::jmin(sx, sy));
+    const float offsetX = ((float) getWidth()  - (float) baseEditorWidthPx  * scale) * 0.5f;
+    const float offsetY = ((float) getHeight() - (float) baseEditorHeightPx * scale) * 0.5f;
+    uiRoot.setTransform(juce::AffineTransform::scale(scale).translated(offsetX, offsetY));
+
+    auto bounds = uiRoot.getLocalBounds().reduced(StudioStyle::Sizes::editorPaddingPx);
 
     constexpr float dialScale = StudioStyle::Sizes::dialScale;
     const int preferredRowH = juce::roundToInt((float) StudioStyle::Sizes::rowHeightPx * dialScale);
@@ -1642,8 +1661,8 @@ void PluginEditor::resized()
         constexpr int scalerSize = 18;
         constexpr int scalerMargin = 8;
         constexpr int scalerNudge = 4;
-        scalerCorner.setBounds(getWidth() - scalerSize - scalerMargin,
-                               getHeight() - scalerSize - scalerMargin,
+        scalerCorner.setBounds(uiRoot.getWidth() - scalerSize - scalerMargin,
+                               uiRoot.getHeight() - scalerSize - scalerMargin,
                                scalerSize,
                                scalerSize);
         scalerCorner.setTopLeftPosition(scalerCorner.getX() + scalerNudge, scalerCorner.getY() + scalerNudge);

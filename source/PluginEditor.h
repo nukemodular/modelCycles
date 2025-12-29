@@ -32,6 +32,11 @@ private:
 
     PluginProcessor& pluginProcessor;
 
+    static constexpr int baseEditorWidthPx = 750;
+    static constexpr int baseEditorHeightPx = 500;
+
+    juce::Component uiRoot;
+
     static constexpr int trackRadioGroupId = 7001;
 
     StudioLookAndFeel lookAndFeel;
