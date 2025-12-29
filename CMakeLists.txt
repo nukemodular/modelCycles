@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(JuceCMakeStarter VERSION 0.1.0 LANGUAGES C CXX)
+project(modelCycles VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,14 +20,17 @@ juce_add_binary_data(JuceCMakeStarterAssets
     assets/PUNCH_ON.svg
     assets/BUTTON_OFF.svg
     assets/BUTTON_ON.svg
+    assets/Scaler.svg
+    assets/LFO_FREE.svg
     assets/LFO_TRG.svg
+    assets/LFO_HLD.svg
     assets/LFO_ONE.svg
     assets/LFO_HLF.svg
 )
 
-juce_add_plugin(JuceCMakeStarter
-    COMPANY_NAME "Studio"
-    BUNDLE_ID "com.studio.jucecmakestarter"
+juce_add_plugin(modelCycles
+    COMPANY_NAME "toolBoy"
+    BUNDLE_ID "com.toolboy.audio"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT TRUE
@@ -36,17 +39,17 @@ juce_add_plugin(JuceCMakeStarter
     CAMERA_PERMISSION_ENABLED FALSE
     COPY_PLUGIN_AFTER_BUILD TRUE
 
-    PLUGIN_MANUFACTURER_CODE Stdo
-    PLUGIN_CODE JcSt
+    PLUGIN_MANUFACTURER_CODE TOOL
+    PLUGIN_CODE MCYC
 
     VST3_CATEGORIES Fx Tools
 
     FORMATS VST3 Standalone
 
-    PRODUCT_NAME "JuceCMakeStarter"
+    PRODUCT_NAME "Model:Cycles"
 )
 
-target_sources(JuceCMakeStarter
+target_sources(modelCycles
     PRIVATE
         source/PluginProcessor.cpp
         source/PluginEditor.cpp
@@ -57,17 +60,18 @@ target_sources(JuceCMakeStarter
     source/ui_components/StudioLookAndFeel.h
     source/ui_components/ImageToggle.h
     source/ui_components/LayeredMenuButton.h
+    source/ui_components/TrackSelectorButton.h
     source/ui_components/StudioStyle.h
 )
 
-target_compile_definitions(JuceCMakeStarter
+target_compile_definitions(modelCycles
     PRIVATE
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-target_link_libraries(JuceCMakeStarter
+target_link_libraries(modelCycles
     PRIVATE
         JuceCMakeStarterAssets
         juce::juce_audio_utils

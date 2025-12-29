@@ -12,7 +12,7 @@ public:
     StudioLookAndFeel()
     {
         // Enforce a consistent sans-serif base.
-        setDefaultSansSerifTypefaceName("Arial");
+        setDefaultSansSerifTypefaceName(StudioStyle::Fonts::condensedFamilyTypefaceName());
 
         setColour(juce::Label::textColourId, StudioStyle::Colours::foreground);
         setColour(juce::Slider::rotarySliderFillColourId, StudioStyle::Colours::accent);
@@ -23,20 +23,19 @@ public:
 
     juce::Font getLabelFont(juce::Label& label) override
     {
-        const auto h = (float) label.getHeight();
-        const float size = juce::jlimit(10.0f, 18.0f, h * 0.8f);
-        return makeArialBold(size);
+        juce::ignoreUnused(label);
+        return makeCondensedBold(StudioStyle::Fonts::SizePx::uiLabel);
     }
 
     juce::Font getSliderPopupFont(juce::Slider& slider) override
     {
         juce::ignoreUnused(slider);
-        return makeArialBold(14.0f);
+        return makeCondensedBold(StudioStyle::Fonts::SizePx::sliderPopup);
     }
 
     juce::Font getPopupMenuFont() override
     {
-        return makeArialBold(14.0f);
+        return makeCondensedBold(StudioStyle::Fonts::SizePx::popupMenu);
     }
 
     // Custom rotary dial drawing for our RotaryDialSlider.
@@ -51,10 +50,10 @@ public:
                           juce::Slider& s) override;
 
 private:
-    juce::Font makeArialBold(float heightPx) const
+    juce::Font makeCondensedBold(float heightPx) const
     {
         // Use FontOptions so metrics are consistent with JUCE 8 portable metrics.
-        return withDefaultMetrics(juce::FontOptions { "Arial", heightPx, juce::Font::bold });
+        return withDefaultMetrics(StudioStyle::Fonts::condensedBoldOptions(heightPx));
     }
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(StudioLookAndFeel)
@@ -86,7 +85,7 @@ inline void StudioLookAndFeel::drawRotarySlider(juce::Graphics& g,
     ringArea = ringArea.expanded(dial->ringOutsetPx).getIntersection(squareArea);
     ringArea = ringArea.reduced(StudioStyle::Sizes::dialArcRadiusTrimPx);
 
-    const auto ringColour = s.findColour(juce::Slider::rotarySliderOutlineColourId);
+    const auto ringColour = juce::Colour(0xFF727676);
     const auto valueColour = s.findColour(juce::Slider::rotarySliderFillColourId);
 
     // Path::addCentredArc: 0 at 12 o'clock, increasing clockwise.
@@ -169,7 +168,7 @@ inline void StudioLookAndFeel::drawRotarySlider(juce::Graphics& g,
         const auto maxPos = centre + juce::Point<float>(std::cos(endP), std::sin(endP)) * textRadius;
 
         g.setColour(StudioStyle::Colours::foreground.withAlpha(0.75f));
-        g.setFont(makeArialBold(10.5f));
+        g.setFont(makeCondensedBold(StudioStyle::Fonts::SizePx::dialRangeText));
 
         const auto rMin = juce::Rectangle<float>(0, 0, 48, 16).withCentre(minPos);
         const auto rMax = juce::Rectangle<float>(0, 0, 48, 16).withCentre(maxPos);
@@ -180,8 +179,8 @@ inline void StudioLookAndFeel::drawRotarySlider(juce::Graphics& g,
     // Dial image (between ring and value text)
     if (dial->dialImage.isValid())
     {
-        auto imageBounds = squareArea.reduced(ringThickness + 6.0f);
-        imageBounds = imageBounds.translated(StudioStyle::Sizes::dialImageOffsetPx, StudioStyle::Sizes::dialImageOffsetPx);
+        auto imageBounds = squareArea.reduced(ringThickness + dial->dialImagePaddingPx);
+        imageBounds = imageBounds.translated(dial->dialImageOffsetPx, dial->dialImageOffsetPx);
         g.setOpacity(1.0f);
         g.drawImageWithin(dial->dialImage,
                           (int) imageBounds.getX(),
@@ -194,8 +193,12 @@ inline void StudioLookAndFeel::drawRotarySlider(juce::Graphics& g,
     // Center value text
     {
         const auto valueBounds = squareArea.reduced(ringThickness + 10.0f);
-        g.setColour(StudioStyle::Colours::foreground);
-        g.setFont(makeArialBold(dial->valueFontHeightPx));
+        auto valueTextColour = StudioStyle::Colours::foreground;
+        if (s.isColourSpecified(juce::Slider::textBoxTextColourId))
+            valueTextColour = s.findColour(juce::Slider::textBoxTextColourId);
+
+        g.setColour(valueTextColour);
+        g.setFont(makeCondensedBold(dial->valueFontHeightPx));
 
         const auto text = s.getTextFromValue(s.getValue());
         g.drawFittedText(text, valueBounds.toNearestInt(), juce::Justification::centred, 1);

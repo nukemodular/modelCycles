@@ -40,5 +40,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    std::atomic<float> fallbackZero { 0.0f };
+    std::array<std::atomic<float>*, 6> trackPitchSemitones { { &fallbackZero, &fallbackZero, &fallbackZero, &fallbackZero, &fallbackZero, &fallbackZero } };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

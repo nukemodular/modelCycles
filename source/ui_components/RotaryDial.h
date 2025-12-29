@@ -64,6 +64,13 @@ public:
     float valueFontHeightPx { 16.0f };
     juce::Image dialImage;
 
+    // Extra padding between the ring and the dial image. Default matches existing look.
+    // Reduce this to let the dial image overlap the arc slightly.
+    float dialImagePaddingPx { 6.0f };
+
+    // Optional pixel offset for centering dial artwork.
+    float dialImageOffsetPx { StudioStyle::Sizes::dialImageOffsetPx };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryDialSlider)
 };
 
@@ -101,7 +108,7 @@ public:
         slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
         slider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
         slider.setPopupDisplayEnabled(false, false, this);
-        slider.setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xFFFD5252));
+        slider.setColour(juce::Slider::rotarySliderFillColourId, juce::Colour(0xFFFD5252)); // 0xFD5252 
         slider.setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colours::black);
         addAndMakeVisible(slider);
 
@@ -127,10 +134,23 @@ public:
         resized();
     }
 
+    void setLabelColour(juce::Colour newColour)
+    {
+        label.setColour(juce::Label::textColourId, newColour);
+        label.repaint();
+    }
+
     void setLabelPlacement(LabelPlacement placement)
     {
         labelPlacement = placement;
         label.setVisible(labelPlacement != LabelPlacement::None);
+        resized();
+    }
+
+    // How far the label is pulled upwards (into the dial area). Default matches the original look.
+    void setLabelRaisePx(float newRaisePx)
+    {
+        labelRaiseBasePx = juce::jmax(0.0f, newRaisePx);
         resized();
     }
 
@@ -195,6 +215,18 @@ public:
         slider.repaint();
     }
 
+    void setDialImagePadding(float paddingPx)
+    {
+        slider.dialImagePaddingPx = juce::jmax(0.0f, paddingPx);
+        slider.repaint();
+    }
+
+    void setDialImageOffset(float offsetPx)
+    {
+        slider.dialImageOffsetPx = offsetPx;
+        slider.repaint();
+    }
+
     void setDialImageFromMemory(const void* data, int dataSizeBytes)
     {
         if (data == nullptr || dataSizeBytes <= 0)
@@ -237,15 +269,23 @@ public:
     {
         auto bounds = getLocalBounds();
 
-        const int labelHeight = (labelPlacement == LabelPlacement::None) ? 0 : (int) juce::roundToInt(20.0f * uiScale);
-        const int gap = (labelPlacement == LabelPlacement::None) ? 0 : (int) juce::roundToInt(6.0f * uiScale);
-        const int labelRaisePx = (int) juce::roundToInt(30.0f * uiScale);
+        constexpr int labelYOffsetPx = StudioStyle::Sizes::dialLabelYOffsetPx;
+
+        const int labelHeight = (labelPlacement == LabelPlacement::None)
+                        ? 0
+                        : (int) juce::roundToInt(StudioStyle::Sizes::dialLabelAreaHeightPx * uiScale);
+        const int gap = (labelPlacement == LabelPlacement::None)
+                    ? 0
+                    : (int) juce::roundToInt(StudioStyle::Sizes::dialLabelGapPx * uiScale);
+        const int labelRaisePx = (int) juce::roundToInt(labelRaiseBasePx * uiScale);
 
         if (labelPlacement == LabelPlacement::Above)
         {
             auto labelArea = bounds.removeFromTop(labelHeight);
             bounds.removeFromTop(gap);
-            label.setBounds(labelArea);
+            label.setBounds(labelArea.translated(0, labelYOffsetPx));
+
+            label.setFont(StudioStyle::Fonts::dialLabelFont());
 
             const int side = juce::jmin(bounds.getWidth(), bounds.getHeight());
             auto dialArea = bounds.removeFromTop(side).withSizeKeepingCentre(side, side);
@@ -263,7 +303,9 @@ public:
             auto dialArea = bounds.removeFromTop(side).withSizeKeepingCentre(side, side);
             slider.setBounds(dialArea.reduced(2));
 
-            label.setBounds(labelArea.translated(0, -labelRaisePx));
+            label.setBounds(labelArea.translated(0, -labelRaisePx + labelYOffsetPx));
+
+            label.setFont(StudioStyle::Fonts::dialLabelFont());
             return;
         }
 
@@ -277,6 +319,7 @@ private:
     RotaryDialSlider slider;
     LabelPlacement labelPlacement { LabelPlacement::Below };
     float uiScale { 1.0f };
+    float labelRaiseBasePx { StudioStyle::Sizes::dialLabelRaiseBasePx };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryDial)
 };

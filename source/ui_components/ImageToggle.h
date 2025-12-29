@@ -37,7 +37,7 @@ public:
 
     void paintButton(juce::Graphics& g, bool isMouseOverButton, bool isButtonDown) override
     {
-        juce::ignoreUnused(isMouseOverButton);
+        juce::ignoreUnused(isMouseOverButton, isButtonDown);
         const auto outer = getLocalBounds().toFloat();
 
         // A: black rounded-rect background (full size)
@@ -55,9 +55,6 @@ public:
         grad.addColour(StudioStyle::Sizes::gradientBandStart, light);
         grad.addColour(StudioStyle::Sizes::gradientBandEnd, darkGrey);
         grad.addColour(1.00, darkGrey);
-
-        if (isButtonDown)
-            grad.multiplyOpacity(0.95f);
 
         g.setGradientFill(grad);
         g.fillRoundedRectangle(b, juce::jmax(0.0f, cornerRadiusPx - StudioStyle::Sizes::buttonOutlinePx));
