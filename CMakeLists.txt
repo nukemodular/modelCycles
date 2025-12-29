@@ -30,7 +30,7 @@ juce_add_binary_data(JuceCMakeStarterAssets
 
 juce_add_plugin(modelCycles
     COMPANY_NAME "toolBoy"
-    BUNDLE_ID "com.toolboy.audio"
+    BUNDLE_ID "com.toolboy.modelcycles"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT TRUE
@@ -46,7 +46,7 @@ juce_add_plugin(modelCycles
 
     FORMATS VST3 Standalone
 
-    PRODUCT_NAME "modelCycles"
+    PRODUCT_NAME "ModelCycles"
 )
 
 target_sources(modelCycles
