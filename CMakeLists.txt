@@ -46,7 +46,7 @@ juce_add_plugin(modelCycles
 
     FORMATS VST3 Standalone
 
-    PRODUCT_NAME "Model:Cycles"
+    PRODUCT_NAME "modelCycles"
 )
 
 target_sources(modelCycles
